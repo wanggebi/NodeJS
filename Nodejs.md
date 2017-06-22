@@ -120,7 +120,7 @@ ajax很多。现在单页的机制似乎很流行，比如phonegap做出来的AP
 
 ### 数据库
 
-- mongoDB([MongoDB安装配置和启动](https://ithack.github.io/2017/05/11/MongoDB%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%92%8C%E5%90%AF%E5%8A%A8.html))
+- mongoDB([MongoDB安装配置和启动](http://note.youdao.com/noteshare?id=ada2052d417d6dec0799ccf380073aee))
 
 ### 主要依赖包
 
