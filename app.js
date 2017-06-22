@@ -14,20 +14,20 @@ const MongoStore = require('connect-mongo')(session);
 const router = express.Router();
 const bodyParser = require('body-parser');
 const app = express();
-const User = require('./server/db').User;
+//const User = require('./server/db').User;
 const resolve = file=>path.resolve(__dirname, file);
-const db = require('./server/db');
+//const db = require('./server/db');
 
 app.set('port', (process.env.port || 3300));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
+/*app.use(session({
     secret: 'csdemo',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
     store: new MongoStore({ mongooseConnection: mongoose.connection }) //session存储位置
-}));
+}));*/
 //后端表单验证
 app.use(validator({
     errorFormatter: function (param, msg, value) {
@@ -58,11 +58,19 @@ app.get('/demo', function (req, res, next) {
         res.send(html);
 });
 router.get('/get', function(req, res, next){
-    console.log(req.query.id)
+
     let id=req.query.id;
-    if(!id) {
-        return next(new Error('未提供查询字段'));
-    }
+
+    if(!id || id == 'null') {
+
+        return res.status(404).send('未提供查询字段');
+		//return next();
+    }else{
+		return res.status(200).send({msg:'您是要查询'+id+'吗？'});
+		//return next();
+	}
+
+	/*
     db.test.findOne({_id: id}).exec(function(err, result){
         if ( err ) {
             console.log('get category: '+ err);
@@ -72,7 +80,7 @@ router.get('/get', function(req, res, next){
             return next(new Error('article not found: ', id));
         }
         res.status(200).send(JSON.stringify(result)).end();
-    });
+    });*/
 });
 router.post('/set', function(req, res, next){
     const email= req.body.email;
@@ -82,10 +90,15 @@ router.post('/set', function(req, res, next){
     req.checkBody('email', '须为邮箱且不能为空').notEmpty().isEmail();
     req.checkBody('password', '密码不能为空').notEmpty();
 
-    let errors=req.validationErrors(); console.log(errors);
-    if(errors) return res.status(301).send(errors).end();
+    let errors=req.validationErrors(); 
+	
+    if(errors) 
+		return res.status(301).send(errors).end();
+	else
+		return res.status(200).send({msg:'成功！'}).end();
 
-    const user= new db.test({
+    /*
+	const user= new db.test({
         name: email.split('@').shift(),
         email:email,
         password:md5(password),
@@ -100,7 +113,7 @@ router.post('/set', function(req, res, next){
             //res.redirect('/adminArticleList');
             res.status(200).send(JSON.stringify(result)).end();
         }
-    });
+    });*/
 });
 app.use(router);
 app.listen(app.get('port'), function(){
